@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+#lista-spese thead,tfoot{
+	background-color: #808080;
+}
+
+#lista-spese tbody{
+	background-color: #c0c0c0; 
+}
+
+#lista-utenti thead{
+		background-color: #808080;
+}
+
+#lista-utenti tbody{
+	background-color: #c0c0c0; 
+}

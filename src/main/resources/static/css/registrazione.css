@@ -1,0 +1,76 @@
+@charset "UTF-8";
+
+body{
+    background-image: URL(../img/foto1.jpg);
+    background-attachment: scroll;
+	background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat; 
+    min-height: 100vh; 
+    padding: 0; 
+}
+
+#register-form {
+  width: 100%;
+  max-width: 400px;
+  margin: 120px auto;
+  padding: 40px 30px;/*spazio interno*/
+  border: 2px solid black;
+  border-radius: 8px;
+  background-color: transparent;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+}
+
+#register-form h2 {
+  font-size: 38px;
+  color: #202124;
+  margin-top: -10px; 
+  margin-bottom: 20px;
+}
+
+#register-form input[type="text"],
+#register-form input[type="password"] {
+  width: 90%;
+  padding: 14px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  font-size: 16px;
+  outline: none; /* Rimuove il bordo blu di default su focus */
+  transition: border 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Animazione su focus */
+}
+
+#register-form input:focus {
+  border-color: #0080ff; /* Bordo blu Google in focus */
+  box-shadow: 0 0 0 2px rgba(66,133,244,0.2); /* Effetto glow azzurro attorno all'input */
+}
+#register-form a {
+  display: inline-block; /* Permette di gestire margini verticali */
+  margin-top: 18px; /* Spazio sopra al link */
+  color: #1a73e8; /* Colore blu del link */
+  text-decoration: none; /* Rimuove il sottolineato */
+  font-size: 18px;
+  font-weight: 500; /* Testo più piccolo */
+}
+
+#register-form a:hover {
+  color: #004080; /* Sottolinea al passaggio del mouse */
+}
+
+.btn-register {
+  width: 100%; /* Occupa tutta la larghezza */
+  padding: 14px; /* Spazio interno del bottone */
+  background-color: #1a73e8; /* Blu principale di Google */
+  color: black; 
+  font-size: 16px; 
+  font-weight: 700; 
+  border: none;
+  border-radius: 4px; 
+  cursor: pointer; 
+  transition: background-color 0.2s ease; /* Animazione sul passaggio */
+}
+.btn-register:hover{
+	  background-color: #004080; 
+	
+}

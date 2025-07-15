@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Registrazione - Frontend</title>
+<link rel="stylesheet" href="css/registrazione.css">
+
+</head>
+<body>
+<div id="register-form" style="margin-top: 40px;">
+  <h2>Registrazione</h2>
+  <input type="text" id="new-username" placeholder="Nuovo Username" /><br /><br />
+  <input type="password" id="new-password" placeholder="Nuova Password" /><br /><br />
+  <button class="btn btn-register" onclick="register()">Registrati</button><br><br>
+  <a href="index.html">Torna alla Home</a>
+  
+  <script>
+  function register() {
+    const username = document.getElementById('new-username').value;
+    const password = document.getElementById('new-password').value;
+
+    const utente = {
+      username: username,
+      password: password
+    };
+
+    fetch('http://localhost:8080/auth/registrazione', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(utente)
+    })
+    .then(response => {
+      if (response.ok) {
+        alert('Registrazione completata! Ora puoi fare il login.');
+        document.getElementById('new-username').value = '';
+        document.getElementById('new-password').value = '';
+      } else {
+        response.text().then(text => alert('Errore nella registrazione: ' + text));
+      }
+    })
+    .catch(error => {
+      console.error('Errore:', error);
+      alert('Errore di rete durante la registrazione');
+    });
+  }
+</script>
+  
+</div>
+</body>
+</html>

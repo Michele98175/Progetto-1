@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Gestione Spese - Frontend</title>
+
+<link rel="stylesheet" href="css/login.css">
+<link rel="stylesheet" href="css/spese.css">
+
+  <style >
+  
+   /* body { font-family: Arial, sans-serif; margin: 20px; } */
+    #lista-spese { margin-top: 20px; }
+    #lista-spese table { border-collapse: collapse; width: 100%; }
+    #lista-spese th, #lista-spese td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    
+    /* body { font-family: Arial, sans-serif; margin: 20px; } */
+    #lista-utenti { margin-top: 20px; }
+    #lista-utenti table { border-collapse: collapse; width: 100%; }
+    #lista-utenti th, #lista-utenti td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+  </style>
+  
+</head>
+<body>
+  
+  <div id="login-form">
+    <h2>LOGIN</h2>
+    <input type="text" id="username" placeholder="Username" /><br /><br />
+    <input type="password" id="password" placeholder="Password" /><br /><br />
+    <button class="btn btn-login" onclick="login()">Login</button><br><br>
+    <a href="Registrazione.html">Registrazione</a>
+  </div>
+  
+
+  <div id="logout-form" style="display:none;">
+    <p>Sei loggato come <span id="utente-loggato"></span>.</p>
+    <button class="btn btn-logout" onclick="logout()">Logout</button>
+  </div>
+  
+  
+    <div id="aggiunta-spesa" style="display: none;">
+  <h3 style="color: blue">Aggiungi nuova spesa</h3>
+  <div>
+    <input type="text" id="descrizione" placeholder="Descrizione">
+    <input type="number" id="importo" placeholder="Importo">
+    <input type="text" id="categoria" placeholder="Categoria">
+    <input type="date" id="data">
+    <button class="btn btn-aggiungi" onclick="aggiungiSpesa()">Aggiungi</button>
+  </div>
+  
+
+  <div id="lista-spese" style="display:none;">
+    <h2 style="color: blue">Lista Spese</h2>
+
+  <table>
+    <thead>
+      <tr><th>Utente</th><th>Descrizione</th><th>Categoria</th><th>Importo</th><th>Data</th><th>Azioni</th></tr>
+    </thead>
+    <tbody id="spese-tbody"></tbody>
+    <tfoot>
+      <tr>
+        <th colspan="5">Totale Spese</th>
+        <th id="totale-spese">€0.00</th>
+      </tr>
+    </tfoot>
+  </table>
+<div id="paginazione-container" style="margin-top: 10px; display: flex; gap: 10px;"></div>
+<div id="paginazione">
+  <span id="numero-pagina" style="color: red"></span><br><br>
+  <button onclick="paginaPrecedente()">Precedente</button>
+  <button onclick="paginaSuccessiva()">Successiva</button>
+</div>
+
+  <h2 style="color: blue">Filtra Spese</h2>
+
+  <form id="filtro-form">
+    <div id="utente-f-div">
+      <label>Utente: </label>
+      <input type="text" id="utente-f">
+    </div>
+
+    <div>
+      <label>Categoria: </label>
+      <input type="text" id="categoria-f">
+    </div>
+
+    <div>
+      <label>Data Inizio: </label>
+      <input type="date" id="dataInizio">
+    </div>
+
+    <div>
+      <label>Data Fine: </label>
+      <input type="date" id="dataFine">
+    </div>
+
+    <button class="btn btn-filtra" type="button" onclick="filtraSpesa()">Cerca</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Utente</th>
+        <th>Descrizione</th>
+        <th>Categoria</th>
+        <th>Importo</th>
+        <th>Data</th>
+      </tr>
+    </thead>
+    <tbody id="filtro-tbody"></tbody>
+    <tfoot>
+      <tr>
+        <th colspan="4">Totale Spese</th>
+        <th id="totale-spese-filtrate">€0.00</th>
+      </tr>
+    </tfoot>
+  </table>
+</div> 
+  
+  <div id="lista-utenti" style="display: none;">
+   <h2 style="color: blue">Lista Utenti</h2>
+   <table>
+   <thead>
+       <tr><th>ID</th><th>Username</th><th>Email</th><th>Ruoli</th><th>Azioni</th></tr>
+   </thead>
+   <tbody id="utenti-tbody"></tbody>
+   </table>
+  </div> 
+  </div> 
+  
+  
+  <div id="modifica-spesa" style="display: none;">
+  <h3>Modifica Spesa</h3>
+  <input type="hidden" id="modifica-id" />
+  <input type="text" id="modifica-descrizione" placeholder="Descrizione" />
+  <input type="number" id="modifica-importo" placeholder="Importo" step="0.01" />
+  <input type="text" id="modifica-categoria" placeholder="Categoria" />
+  <input type="date" id="modifica-data" />
+  <button class="btn btn-salva" onclick="salvaModifica()">Salva</button>
+  <button class="btn btn-annulla" onclick="annullaModifica()">Annulla</button>
+</div>
+
+
+<div id="admin-spese" style="display: none;">
+<button class="btn btn-tutte-spese" onclick="trovaTutteSpese()">Vedi Tutte Spese</button>
+<button class="btn btn-tutti-utenti" onclick="trovaTuttiUtenti()">Vedi Tutti Utenti</button>
+</div>
+
+
+<script src="js/spese.js"></script>
+<script src="js/utenti.js"></script>
+
+</body>
+</html>

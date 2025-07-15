@@ -1,0 +1,145 @@
+@charset "UTF-8";
+body{
+    background-image: URL(../img/foto1.jpg);
+    background-attachment: scroll;
+	background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat; 
+    min-height: 100vh; 
+    padding: 0; 
+}
+
+/* Stile body dopo login */
+body.logged-in {
+  background-image: none; /* Oppure cambia immagine */
+  background-color: black; /* O qualsiasi altro colore */
+}
+
+#login-form {
+  width: 100%;
+  max-width: 400px;
+  margin: 120px auto;
+  padding: 40px 30px;/*spazio interno*/
+  border: 2px solid black;
+  border-radius: 8px;
+  background-color: transparent;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+}
+
+#login-form h2 {
+  font-size: 38px;
+  color: #202124;
+  margin-top: -10px; 
+  margin-bottom: 20px;
+}
+
+#login-form input[type="text"],
+#login-form input[type="password"] {
+  width: 90%;
+  padding: 14px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  font-size: 16px;
+  outline: none; /* Rimuove il bordo blu di default su focus */
+  transition: border 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Animazione su focus */
+}
+
+#login-form input:focus {
+  border-color: #4285f4; /* Bordo blu Google in focus */
+  box-shadow: 0 0 0 2px rgba(66,133,244,0.2); /* Effetto glow azzurro attorno all'input */
+}
+#login-form a {
+  display: inline-block; /* Permette di gestire margini verticali */
+  margin-top: 18px; /* Spazio sopra al link */
+  color: #1a73e8; /* Colore blu del link */
+  text-decoration: none; /* Rimuove il sottolineato */
+  font-size: 18px;
+  font-weight: 500; /* Testo più piccolo */
+}
+
+#login-form a:hover {
+  color: #004080; /* Sottolinea al passaggio del mouse */
+}
+.btn {
+	padding: 6px 12px;
+	margin: 2px;
+	border: none;
+	border-radius: 4px;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.btn-login {
+  width: 100%; /* Occupa tutta la larghezza */
+  padding: 14px; /* Spazio interno del bottone */
+  background-color: #1a73e8; /* Blu principale di Google */
+  color: black; 
+  font-size: 16px; 
+  font-weight: 700; 
+  border: none;
+  border-radius: 4px; 
+  cursor: pointer; 
+  transition: background-color 0.2s ease; /* Animazione sul passaggio */
+}
+
+.btn-login:hover {
+  background-color: #004080; /* Blu leggermente più scuro al passaggio */
+}
+
+.btn-modifica {
+	background-color: #007bff; /* blu */
+	color: white;
+}
+
+.btn-elimina {
+	background-color: #dc3545; /* rosso */
+	color: white;
+}
+
+/*.btn-login {
+	width:30%;
+	background-color: black;
+	color: white;
+	border: 3px solid #333;
+	border-radius: 40px;
+} */
+
+.btn-logout {
+	background-color: blue;
+	color: white;
+}
+
+.btn-aggiungi {
+	background-color: #00ff00; /* verde */
+	color: white;
+}
+
+.btn-filtra {
+	background-color: #00ff00;
+	color: white;
+}
+
+.btn-salva {
+	background-color: #ffff00;
+	color: white;
+}
+
+.btn-annulla {
+	background-color: #800040;
+	color: white;
+}
+
+.btn-tutte-spese {
+	background-color: #408080;
+	color: white;
+}
+
+.btn-tutti-utenti {
+	background-color: #408080;
+	color: white;
+}
+#filtro-form label{
+	color:blue;
+}
