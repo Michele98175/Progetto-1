@@ -10,7 +10,6 @@ public interface UtenteRepository extends JpaRepository<Utente,Long>{
 
 	boolean existsByUsername(String username);
 	
-	Optional<Utente> findByUsername(String username);
 
 	
     @Query("SELECT u FROM Utente u LEFT JOIN FETCH u.spese WHERE u.username = :username")

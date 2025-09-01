@@ -51,29 +51,20 @@ public class SpesaController {
 	public Optional<Spesa> trovaSpesaById(@PathVariable Long id){
 		return spesaService.trovaSpesaById(id);
 	}
-	
-	//VEDI TUTTE SPESE(ADMIN)
-	@GetMapping("/tutte")
-	@PreAuthorize("hasRole('ADMIN')")
-	public List<SpesaDTO> trovaTutteSpese(){
-		return spesaService.trovaTutteSpese();
-	}
-	
-	@GetMapping("/tutte-con-utente")
-	public List<SpesaDTO> getTutteSpeseConUtente() {
-	    return spesaService.trovaTutteSpeseDTOConUtente();
-	}
+
 	
 	//VEDI SPESE SINGOLO UTENTE
 	@GetMapping("/mie")
 	public List<SpesaDTO> getSpeseUtente() {
 	    return spesaService.getSpeseUtente();
 	}
+	
 	@GetMapping("/mie-paginato")
+	@PreAuthorize("hasRole('USER')")
 	public Page<SpesaDTO> getSpeseUtentePaginato(
 	        @AuthenticationPrincipal Utente utente,
 	        @RequestParam(defaultValue = "0") int page,
-	        @RequestParam(defaultValue = "3") int size
+	        @RequestParam(defaultValue = "10") int size
 	) {
 	    return spesaService.trovaPerUtentePaginato(utente,page, size);
 	}
@@ -82,7 +73,7 @@ public class SpesaController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public Page<SpesaDTO> getTutteSpesePaginato(
 	        @RequestParam(defaultValue = "0") int page,
-	        @RequestParam(defaultValue = "3") int size
+	        @RequestParam(defaultValue = "10") int size
 	) {
 	    return spesaService.trovaTutteSpesePaginato(page, size);
 	}
@@ -107,6 +98,8 @@ public class SpesaController {
 		return ResponseEntity.ok(spesa);
 	}
 	
+	
+	
 	//ELIMINO SPESA(ADMIN,UTENTE)
 	//Authentication=fornisce informazioni dettagliate sull’utente autenticato, i suoi ruoli, i permessi, lo stato di autenticazione, ecc.
 	@DeleteMapping("/admin/{id}")
@@ -121,6 +114,7 @@ public class SpesaController {
 	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Spesa non trovata");
 	        }
 	    }
+	    
 	
 	@DeleteMapping("/utente/{id}")
 	@PreAuthorize("hasRole('USER')")
@@ -164,28 +158,23 @@ public class SpesaController {
 		    boolean isAdmin = auth.getAuthorities().stream()
 		                          .anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
 
-		    List<Spesa> spese;
+		    List<SpesaDTO> spese;
 
 		    if (isAdmin) {
 		        // L'admin può vedere tutto, filtrando come prima
 		    	if(utente != null&& !utente.isBlank()) {
 		    		spese = spesaService.trovaByUtente(utente);
-		    	} else if (categoria != null && a != null && b != null) {
-		            spese = spesaService.trovaByCategoriaEData(categoria, a, b);
 		        } else if (categoria != null) {
 		            spese = spesaService.trovaByCategoria(categoria);
 		        } else if (a != null && b != null) {
 		            spese = spesaService.trovaByData(a, b);
 		        } else {
-		            spese = spesaRepository.findAll();
+		        	  spese = spesaService.trovaTutte(); 
 		        }
 		    } else {
 		    	if(utente != null) {
 		    		throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Non puoi filtrare per utente");
-		    	}
 		        // L'utente normale vede solo le sue spese, eventualmente filtrate
-		        if (categoria != null && a != null && b != null) {
-		            spese = spesaService.trovaByUtenteCategoriaEData(username, categoria, a, b);
 		        } else if (categoria != null) {
 		            spese = spesaService.trovaByUtenteECategoria(username, categoria);
 		        } else if (a != null && b != null) {
@@ -195,9 +184,7 @@ public class SpesaController {
 		        }
 		    }
 
-		    return spese.stream()
-		                .map(SpesaDTO::fromSpesa)
-		                .collect(Collectors.toList());
+		    return spese;
 		}
 		
 		@GetMapping("/totaleSpese")

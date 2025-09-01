@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Version;
 import com.example.Utente.Utente;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +22,7 @@ public class Spesa {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)/*GENERA VALORE E LO INCREMENTA (ID)*/
 	private Long id;
-	private String descrizione;
+	private String metodoPagamento;
 	private double importo;
 	private String categoria;
 	private LocalDate data;
@@ -33,17 +35,22 @@ public class Spesa {
 	@Version
 	private Long versione; // Hibernate gestisce automaticamente la versione
 	
+	public enum MetodoPagamento {
+	    CONTANTI,
+	    CARTA
+	}
+	
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getDescrizione() {
-		return descrizione;
+	public String getMetodoPagamento() {
+		return metodoPagamento;
 	}
-	public void setDescrizione(String descrizione) {
-		this.descrizione = descrizione;
+	public void setMetodoPagamento(String metodoPagamento) {
+		this.metodoPagamento = metodoPagamento;
 	}
 	public double getImporto() {
 		return importo;

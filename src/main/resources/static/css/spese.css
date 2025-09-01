@@ -1,17 +1,155 @@
 @charset "UTF-8";
 
-#lista-spese thead,tfoot{
+   #lista-spese,#lista-utenti{
+	margin-top: 20px;
+	margin-bottom: 30px;
+    }
+   #lista-spese table,#lista-utenti table { 
+    border-collapse: collapse; 
+    width: 100%; 
+    }
+   #lista-spese th,#lista-spese td,#lista-utenti th,#lista-utenti td {
+    border: 1px solid black;
+    padding :4px; 
+    }
+
+#lista-spese thead,tfoot,#lista-utenti thead{
 	background-color: #808080;
 }
 
-#lista-spese tbody{
+#lista-spese tbody,#lista-utenti tbody{
 	background-color: #c0c0c0; 
 }
 
-#lista-utenti thead{
-		background-color: #808080;
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+body {
+	background-image: URL(../img/foto1.jpg);
+    background-attachment: scroll;
+	background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat; 
+    min-height: 100vh; 
+    padding: 0; 
+    font-family: 'Roboto', sans-serif;
 }
 
-#lista-utenti tbody{
-	background-color: #c0c0c0; 
+/* Tabelle */
+table {
+  /* width: calc(100% - 80px);  100% meno i margini */
+  /*margin-right: 40px;
+  margin-left: 40px;  / */
+  
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+
+
+thead th {
+  height:25px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+
+tbody tr:hover {
+  background-color: #808080;
+  cursor: pointer;
+}
+
+tbody td {
+	
+  font-size: 14px;
+  color: #444;
+}
+
+tfoot {
+  background-color: #f0f0f0;
+  font-weight: 600;
+  font-size: 15px;
+  color: #222;
+}
+
+tfoot th, tfoot td {
+  padding: 12px 16px;
+  text-align: left;
+}
+
+
+
+/* Form filtro */
+#filtro-form {
+  background-color: #fff;
+  border: 2px solid #3f51b5;
+  padding: 16px;
+  border-radius: 8px;
+  max-width: 600px;
+  margin: 20px auto;
+  display: block;
+   /* per essere un blocco centrabile */
+}
+
+#filtro-form label {
+  font-weight: 600;
+  margin-right: 8px;
+  color: #3f51b5;
+}
+
+#filtro-form input[type="text"],
+#filtro-form input[type="date"] {
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-right: 12px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+#tabella-filtrata {
+  margin-top: 50px;
+}
+    #tabella-filtrata th,#tabella-filtrata td {border: 1px solid black;padding :8px;}
+
+
+/* Spaziatura */
+#aggiunta-spesa > div {
+  margin-bottom: 12px;
+}
+
+h2, h3 {
+  color: #3f51b5;
+}
+
+/* Responsive: mantiene la struttura a tabella anche sotto i 768px */
+@media (max-width: 768px) {
+  table {
+    font-size: 13px; /* Riduce la dimensione del testo */
+  }
+
+  thead th,
+  tbody td,
+  tfoot td {
+    padding: 8px 10px; /* Riduce il padding per risparmiare spazio */
+  }
+
+  table {
+    display: block; /* Permette lo scroll orizzontale se serve */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Scroll fluido su iOS */
+  }
+
+  table thead,
+  table tbody,
+  table tfoot,
+  table tr,
+  table td,
+  table th {
+    white-space: nowrap; /* Evita che il testo vada a capo */
+  }
 }

@@ -6,33 +6,21 @@ import org.hibernate.LazyInitializationException;
 
 public class SpesaDTO {
 	    private Long id;
-	    private String descrizione;
+	    private String metodoPagamento;
 	    private double importo;
 	    private String categoria;
 	    private LocalDate data;
 	    private String usernameUtente;
 	       
-		public SpesaDTO(Long id, String descrizione, double importo, String categoria, LocalDate data,
+		public SpesaDTO(Long id,String metodoPagamento, double importo, String categoria, LocalDate data,
 				String usernameUtente) {
 			this.id = id;
-			this.descrizione = descrizione;
+		    this.metodoPagamento = metodoPagamento;
 			this.importo = importo;
 			this.categoria = categoria;
 			this.data = data;
 			this.usernameUtente = usernameUtente;
-		}
-		/*
-	    public static SpesaDTO fromSpesa(Spesa spesa) {
-	        return new SpesaDTO(
-	            spesa.getId(),
-	            spesa.getDescrizione(),
-	            spesa.getImporto(),
-	            spesa.getCategoria(),
-	            spesa.getData(),
-	            spesa.getUtente() != null ? spesa.getUtente().getUsername() : null
-	        );
-	    }
-		*/
+		}			
 		
 		public SpesaDTO() {
 		}
@@ -40,19 +28,18 @@ public class SpesaDTO {
 		public static SpesaDTO fromSpesa(Spesa spesa) {
 		    SpesaDTO dto = new SpesaDTO();
 		    dto.setId(spesa.getId());
-		    dto.setDescrizione(spesa.getDescrizione());
+		    dto.setMetodoPagamento(spesa.getMetodoPagamento());		   
 		    dto.setImporto(spesa.getImporto());
 		    dto.setCategoria(spesa.getCategoria());
 		    dto.setData(spesa.getData());
 		    
-		    try {
-		        dto.setUsernameUtente(spesa.getUtente().getUsername());
-		    } catch (LazyInitializationException e) {
-		        dto.setUsernameUtente("N/A"); // O gestisci in altro modo
-		    }
-		    
-		    return dto;
-		}
+		    if (spesa.getUtente() != null) {
+	            dto.setUsernameUtente(spesa.getUtente().getUsername());
+	        } else {
+	            dto.setUsernameUtente("N/A");
+	        }
+	        return dto;
+	    }
 		
 		public Long getId() {
 			return id;
@@ -60,11 +47,11 @@ public class SpesaDTO {
 		public void setId(Long id) {
 			this.id = id;
 		}
-		public String getDescrizione() {
-			return descrizione;
+		public String getMetodoPagamento() {
+			return metodoPagamento;
 		}
-		public void setDescrizione(String descrizione) {
-			this.descrizione = descrizione;
+		public void setMetodoPagamento(String metodoPagamento) {
+			this.metodoPagamento = metodoPagamento;
 		}
 		public double getImporto() {
 			return importo;

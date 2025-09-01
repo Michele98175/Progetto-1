@@ -6,17 +6,11 @@ let paginaCorrente = 0;
 let totalePagine = 0;
 const righePerPagina = 10;
 			
- function parseJwt(token) {
-  const base64Payload = token.split('.')[1];
-  const payload = atob(base64Payload);
-  return JSON.parse(payload);
-}
 
 	    
   function caricaSpese(pagina=0){
 	  const token = localStorage.getItem("token");
 	  paginaCorrente = pagina; // aggiorna la variabile globale
-
 	  fetch(`http://localhost:8080/api/spese/mie-paginato?page=${pagina}&size=${righePerPagina}`,{
 		  method: "GET",
 		  headers: { 'Authorization': 'Bearer ' + token,
@@ -48,16 +42,34 @@ const righePerPagina = 10;
 
 			  const riga = document.createElement("tr");
 			  riga.innerHTML =  `
-			     <td>${spesa.usernameUtente}</td>
-			     <td>${spesa.descrizione}</td>
-				 <td>${spesa.categoria}</td>
+			     <td>${spesa.usernameUtente || "-"}</td>
+			     <td>${spesa.metodoPagamento || "-"}</td>
+				 <td>${spesa.categoria || "-"}</td>
 		         <td>${spesa.importo.toFixed(2)} €</td>
 		         <td>${spesa.data}</td>
-		         <td>
-		         <button class="btn btn-modifica" onclick="modificaSpesa(${spesa.id}, this)">Modifica </button>
-		         <button class="btn btn-elimina" onclick="eliminaSpesa(${spesa.id}, this)">Elimina</button>
-		         </td>
-			  `;
+		       <td>
+				<div style="display: flex; gap: 8px;">
+				 <button class="btn btn-modifica" onclick="modificaSpesa(${spesa.id}, this)">
+				   <span class="testo">MODIFICA</span>
+				    <svg class="icona" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				    <path d="M12 20h9"></path>
+				    <path d="M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4 12.5-12.5z"></path>
+				    </svg>
+				 </button>
+				 
+				 
+				 <button class="btn btn-elimina" onclick="eliminaSpesa(${spesa.id})">
+				   <span class="testo">ELIMINA</span>
+				    <svg class="icona" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
+				 	<polyline points="3 6 5 6 21 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+				 	<path d="M19 6l-1 14H6L5 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+				 	<path d="M10 11v6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+				 	<path d="M14 11v6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+				 	<path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+				   </svg>
+				  </button>
+				 </div>
+				</td> `;
           tbody.appendChild(riga);
 		  });
 		  document.getElementById("lista-spese").style.display = "block";
@@ -76,17 +88,96 @@ const righePerPagina = 10;
 	          .catch(errore => {
 		      alert("Errore nel caricamento delle spese: " + errore.message);});
               } 
-  
+			  
+			  function trovaTutteSpese(pagina=0){
+			  	  const token = localStorage.getItem("token");
+			  	  paginaCorrente=pagina;
+			  	  
+			  	  fetch(`http://localhost:8080/api/spese/tutte-paginato?page=${pagina}&size=${righePerPagina}`,{
+			  		  method: "GET",
+			  		  headers: {"Authorization": "Bearer " + token,
+			  		      "Content-Type": "application/json"}
+			  	  })
+			  	  .then(risposta => {
+			  		  if(risposta.ok){
+			  			 return risposta.json();
+			  		  }else{
+			  	         return risposta.text().then(text => { throw new Error(text) });
+			  		  }
+			  	  })
+			  	  .then(dati => {
+			        // Mostra sezione lista spese
+			        document.getElementById("lista-spese").style.display = "block";
+			  	  const spese = dati.content;
+			  	  totalePagine = dati.totalPages;
+			  	  
+
+			        const tbody = document.getElementById("spese-tbody");
+			        if (!tbody) {
+			      	  alert("Errore: tabella spese non trovata nel DOM.");
+			      	  return;
+			      	}
+					
+			        tbody.innerHTML = ""; // Svuota prima
+                    totale = 0;
+					
+			        spese.forEach(spesa => {
+			        totale += spesa.importo;
+					
+			        const riga = document.createElement("tr");
+			        riga.innerHTML = `
+			  		   <td>${spesa.usernameUtente|| "-"}</td>
+			           <td>${spesa.metodoPagamento|| "-"}</td>
+			           <td>${spesa.categoria|| "-"}</td>
+			           <td>${spesa.importo.toFixed(2)} €</td>
+			           <td>${spesa.data}</td>
+			           <td>
+						 <button class="btn btn-modifica" onclick="modificaSpesa(${spesa.id}, this)">
+						  <span class="testo">MODIFICA</span>
+						  <svg class="icona" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						  <path d="M12 20h9"></path>
+						  <path d="M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4 12.5-12.5z"></path>
+						  </svg>
+					     </button>
+										 					 
+						<button class="btn btn-elimina" onclick="eliminaSpesa(${spesa.id})">
+						 <span class="testo">ELIMINA</span>
+					     <svg class="icona" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" >
+					 	 <polyline points="3 6 5 6 21 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+			         	 <path d="M19 6l-1 14H6L5 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+					 	 <path d="M10 11v6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+					 	 <path d="M14 11v6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+					 	 <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+					     </svg>
+					    </button>
+			          </td>
+			          `;
+			          tbody.appendChild(riga);
+			        });
+			  	  // Disabilita pulsanti se necessario
+			  	  				const bottoni = document.querySelectorAll("#paginazione button");
+			  	                   if(bottoni.length >=2){
+			  	  					const btnPrec = bottoni[0];
+			  	  					const btnSucc = bottoni[1];
+			  	  				 
+			  	  				  btnPrec.disabled = paginaCorrente === 0;
+			  	  				  btnSucc.disabled = paginaCorrente >= totalePagine - 1;
+			  	  				}
+			      })
+			  	  .catch(err => alert("Errore durante la modifica: " + err.message));
+			    }
+			    	
+				
   function aggiungiSpesa(){
 	  
 	  const token = localStorage.getItem('token');
-	  const descrizione = document.getElementById("descrizione").value;
+	  const metodoPagamento= document.getElementById("metodoPagamento").value;
 	  const importo = parseFloat(document.getElementById("importo").value);
 	  const categoria = document.getElementById("categoria").value;
 	  const data = document.getElementById("data").value;
 	  
 	  const nuovaSpesa = {
-			descrizione: descrizione,
+		    metodoPagamento: metodoPagamento,
 			importo: importo,
 			categoria: categoria,
 			data: data
@@ -102,7 +193,7 @@ const righePerPagina = 10;
 		  if(risposta.ok){
 			  alert("Spesa aggiunta con successo!");
 			  //SVUOTO CAMPI 
-			  document.getElementById("descrizione").value = '';
+			  document.getElementById("metodoPagamento").value = '';
 			  document.getElementById("importo").value = '';
 			  document.getElementById("categoria").value = '';
 			  document.getElementById("data").value = '';
@@ -145,17 +236,25 @@ const righePerPagina = 10;
 			  }
 	  }).catch(errore => {  alert("Errore eliminazione spesa: " + errore.message) });
       }
+	  function dopoModifica() {
+	    document.getElementById("modifica-spesa").style.display = "none";
+
+	    // Mostra di nuovo tutto
+	    document.getElementById("aggiunta-spesa").style.display = "block";
+	    document.getElementById("lista-spese").style.display = "block";
+	    document.getElementById("lista-utenti").style.display = "block";
+}
   
   function modificaSpesa(id,bottone){
 	  const riga = bottone.closest("tr");
-	  const descrizione = riga.children[1].textContent;
+	  const metodoPagamento = riga.children[1].textContent;
 	  const categoria = riga.children[2].textContent;
 	  const importo = parseFloat(riga.children[3].textContent.replace(" €", ""));
 	  const data = riga.children[4].textContent;	  
 	  
 	  // Riempie i campi del form modifica
       document.getElementById("modifica-id").value = id;
-      document.getElementById("modifica-descrizione").value = descrizione;
+      document.getElementById("modifica-metodoPagamento").value = metodoPagamento;
 	  document.getElementById("modifica-categoria").value = categoria;
       document.getElementById("modifica-importo").value = importo;
       document.getElementById("modifica-data").value = data;
@@ -163,19 +262,22 @@ const righePerPagina = 10;
       // Mostra il form modifica, nasconde aggiunta
       document.getElementById("modifica-spesa").style.display = "block";
       document.getElementById("aggiunta-spesa").style.display = "none";
+	  document.getElementById("lista-spese").style.display = "none";
+	  document.getElementById("lista-utenti").style.display = "none";
+      
   
   }
   function salvaModifica() {
 	  const token = localStorage.getItem("token");
 
 	  const id = document.getElementById("modifica-id").value;
-	  const descrizione = document.getElementById("modifica-descrizione").value;
+	  const metodoPagamento = document.getElementById("modifica-metodoPagamento").value;
 	  const importo = parseFloat(document.getElementById("modifica-importo").value);
 	  const categoria = document.getElementById("modifica-categoria").value;
 	  const data = document.getElementById("modifica-data").value;
 
 	  const spesaModificata = {
-	    descrizione: descrizione,
+	    metodoPagamento: metodoPagamento,
 	    importo: importo,
 	    categoria: categoria,
 	    data: data
@@ -199,6 +301,7 @@ const righePerPagina = 10;
 			  alert("Spesa modificata con successo!");
 
 			 totaleSpese();
+			 dopoModifica();
 			  document.getElementById("modifica-spesa").style.display = "none";
 			  document.getElementById("aggiunta-spesa").style.display = "block";
 		  })
@@ -207,66 +310,8 @@ const righePerPagina = 10;
 
   function annullaModifica() {
 	  document.getElementById("modifica-spesa").style.display = "none";
-	  document.getElementById("aggiunta-spesa").style.display = "block";
+	  dopoModifica();
 	}
-  
-  function trovaTutteSpese(pagina=0){
-	  const token = localStorage.getItem("token");
-	  paginaCorrente=pagina;
-	  
-	  fetch(`http://localhost:8080/api/spese/tutte-paginato?page=${pagina}&size=${righePerPagina}`,{
-		  method: "GET",
-		  headers: {"Authorization": "Bearer " + token,
-		      "Content-Type": "application/json"}
-	  })
-	  .then(risposta => {
-		  if(risposta.ok){
-			 return risposta.json();
-		  }else{
-	         return risposta.text().then(text => { throw new Error(text) });
-		  }
-	  })
-	  .then(dati => {
-      // Mostra sezione lista spese
-      document.getElementById("lista-spese").style.display = "block";
-	  const spese = dati.content;
-	  totalePagine = dati.totalPages;
-	  
-
-      const tbody = document.getElementById("spese-tbody");
-      if (!tbody) {
-    	  alert("Errore: tabella spese non trovata nel DOM.");
-    	  return;
-    	}
-      tbody.innerHTML = ""; // Svuota prima
-
-      spese.forEach(spesa => {
-        const riga = document.createElement("tr");
-        riga.innerHTML = `
-		  <td>${spesa.usernameUtente}</td>
-          <td>${spesa.descrizione}</td>
-          <td>${spesa.categoria}</td>
-          <td>${spesa.importo.toFixed(2)} €</td>
-          <td>${spesa.data}</td>
-          <td>
-            <button class="btn btn-modifica" onclick="modificaSpesa(${spesa.id}, this)">Modifica</button>
-            <button class="btn btn-elimina" onclick="eliminaSpesa(${spesa.id}, this)">Elimina</button>
-          </td>
-        `;
-        tbody.appendChild(riga);
-      });
-	  // Disabilita pulsanti se necessario
-	  				const bottoni = document.querySelectorAll("#paginazione button");
-	                   if(bottoni.length >=2){
-	  					const btnPrec = bottoni[0];
-	  					const btnSucc = bottoni[1];
-	  				 
-	  				  btnPrec.disabled = paginaCorrente === 0;
-	  				  btnSucc.disabled = paginaCorrente >= totalePagine - 1;
-	  				}
-    })
-	  .catch(err => alert("Errore durante la modifica: " + err.message));
-  }
   
   
     function filtraSpesa(){
@@ -311,7 +356,7 @@ const righePerPagina = 10;
 				const riga = document.createElement("tr");
 				riga.innerHTML = 
 				   `<td>${spesa.usernameUtente || "-"}</td>
-				    <td>${spesa.descrizione || "-"}</td>
+				    <td>${spesa.metodoPagamento || "-"}</td>
 				    <td>${spesa.categoria}</td>
 				    <td>${spesa.importo.toFixed(2)}€</td>
 				    <td>${spesa.data}</td>
@@ -320,21 +365,10 @@ const righePerPagina = 10;
 			   totale += spesa.importo;
 			   });
 			   const totaleElemento = document.getElementById("totale-spese-filtrate");
-			       totaleElemento.textContent = `${totale.toFixed(2)}€`;
-			   
+			       totaleElemento.textContent = `${totale.toFixed(2)}€`; 
 	  })
 	  .catch(err => alert("Errore nel filtrare le spese: " + err.message)); }
   
-	  function isTokenValido(token) {
-	  	if (!token) return false;
-	  	try {
-	  		const payload = JSON.parse(atob(token.split('.')[1]));
-	  		const now = Math.floor(Date.now() / 1000);
-	  		return payload.exp && payload.exp > now;
-	  	} catch (e) {
-	  		return false;
-	  	}
-	  }
 	  
 	  
 	  function totaleSpese(){
@@ -417,7 +451,12 @@ const righePerPagina = 10;
 			    }
 			}
 			  
-			
+		/*	SE VUOI NASCONDERE O MOSTRARE ID ANNIDATI 
+				function mostraSolo(id) {
+			  const blocchi = ["aggiunta-spesa", "lista-spese", "lista-utenti", "modifica-spesa", "admin-spese"];
+			  blocchi.forEach(b => document.getElementById(b).style.display = "none");
+			  document.getElementById(id).style.display = "block";
+			} */	
 			
 			
 			

@@ -3,6 +3,7 @@ package com.example.Spesa;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
@@ -39,16 +40,18 @@ public class SpesaService {
 		return spesaRepository.findById(id);
 	}
 	
-	public List<SpesaDTO> trovaTutteSpese(){
-		return spesaRepository.findAllSpeseDTO(); // carica anche utente
-		}
-	
-	@Transactional
-	public List<SpesaDTO> trovaTutteSpeseDTOConUtente() {
-		List<Spesa> spese = spesaRepository.findAllConUtente();
-	    return spese.stream()
-	                .map(this::convertToDTO)
-	                .collect(Collectors.toList());	}
+	    @Transactional
+	    public Page<SpesaDTO> trovaTutteSpesePaginato(int page, int size) {
+	    	 Pageable pageable = PageRequest.of(page, size, Sort.by("data").descending());
+	    	    Page<Spesa> spesePage = spesaRepository.findAllSpese(pageable);
+	    	    return spesePage.map(SpesaDTO::fromSpesa);
+	    }
+	    @Transactional
+	    public Page<SpesaDTO> trovaPerUtentePaginato(Utente utente, int page, int size) {
+	        Pageable pageable = PageRequest.of(page, size, Sort.by("data").descending()); // ordina per data
+	        Page<Spesa> spesePage = spesaRepository.findByUtentePag(utente, pageable);
+	        return spesePage.map(SpesaDTO::fromSpesa);
+	    }
 	
 	@Transactional
 	public List<SpesaDTO> getSpeseUtente() {
@@ -70,6 +73,7 @@ public class SpesaService {
 		nuovaSpesa.setUtente(utente);
 		return spesaRepository.save(nuovaSpesa);
 	}
+
 	@Transactional
 	public void eliminaSpesaByAdmin(Long id,Authentication authentication) {
 				
@@ -109,7 +113,7 @@ public class SpesaService {
 	    if (!utenteHaRuolo("ADMIN") && !spesa.getUtente().getUsername().equals(username)) 
 	        throw new AccessDeniedException("Non hai il permesso per modificare questa spesa");
 		
-		spesa.setDescrizione(nuovaSpesa.getDescrizione());
+		spesa.setMetodoPagamento(nuovaSpesa.getMetodoPagamento());
 		spesa.setImporto(nuovaSpesa.getImporto());
 		spesa.setData(nuovaSpesa.getData());
 		spesa.setCategoria(nuovaSpesa.getCategoria());
@@ -124,56 +128,61 @@ public class SpesaService {
 		 return spesaRepository.findByUtenteUsername(username);
 		}
 	
-	public List<Spesa> trovaByUtente(String username){
-		Utente utente = utenteRepository.findByUsernameConSpese(username)
-				.orElseThrow(()-> new UsernameNotFoundException("username non trovato"));
-		return spesaRepository.findByUtente(utente);
+	// PER EVITARE PROBLEMI DI LAZYINITIALIZATION EXCEPTION
+	// ESEGUIRE LA MAPPATURA DA ENTITÀ A DTO NEL SERVICE
+	// E USARE @TRANSACTIONAL PER TENERE APERTA LA SESSIONE JPA
+	@Transactional(readOnly = true)
+	public List<SpesaDTO> trovaByUtenteECategoria(String username, String categoria) {
+	    return spesaRepository.findByUtenteUsernameAndCategoria(username, categoria)
+	            .stream()
+	            .map(SpesaDTO::fromSpesa)
+	            .collect(Collectors.toList());
 	}
-	//public List<Spesa> trovaByUtente(String username) {
-      //  return spesaRepository.findByUtenteUsername(username); }
-	
-	public List<Spesa> trovaByCategoria(String categoria){
-		return spesaRepository.findByCategoria(categoria);
+
+	@Transactional(readOnly = true)
+	public List<SpesaDTO> trovaByUtenteEData(String username, LocalDate a, LocalDate b) {
+	    return spesaRepository.findByUtenteUsernameAndDataBetween(username, a, b)
+	            .stream()
+	            .map(SpesaDTO::fromSpesa)
+	            .collect(Collectors.toList());
 	}
-	
-	public List<Spesa> trovaByData(LocalDate a,LocalDate b){
-		return spesaRepository.findByData(a, b);
-	}
-	
-	public List<Spesa> trovaByCategoriaEData(String categoria,LocalDate a,LocalDate b){
-		return spesaRepository.findByCategoriaEDataBetween(categoria, a, b);
-	}
-	
-	private boolean utenteHaRuolo(String ruolo) {
-	    return SecurityContextHolder.getContext().getAuthentication().getAuthorities()
-	        .stream()
-	        .anyMatch(a -> a.getAuthority().equals("ROLE_" + ruolo));
-	}
-	
-	public SpesaDTO convertToDTO(Spesa spesa) {
-        return new SpesaDTO(
-            spesa.getId(),
-            spesa.getDescrizione(),
-            spesa.getImporto(),
-            spesa.getCategoria(),
-            spesa.getData(),
-            spesa.getUtente() != null ? spesa.getUtente().getUsername() : null
-        );
-    }
+
 	
 
-    public List<Spesa> trovaByUtenteECategoria(String username, String categoria) {
-        return spesaRepository.findByUtenteUsernameAndCategoria(username, categoria);
-    }
+	@Transactional(readOnly = true)
+	public List<SpesaDTO> trovaByCategoria(String categoria) {
+	    return spesaRepository.findByCategoria(categoria)
+	            .stream()
+	            .map(SpesaDTO::fromSpesa)
+	            .collect(Collectors.toList());
+	}
 
-    public List<Spesa> trovaByUtenteEData(String username, LocalDate a, LocalDate b) {
-        return spesaRepository.findByUtenteUsernameAndDataBetween(username, a, b);
-    }
+	@Transactional(readOnly = true)
+	public List<SpesaDTO> trovaByData(LocalDate a, LocalDate b) {
+	    return spesaRepository.findByData(a, b)
+	            .stream()
+	            .map(SpesaDTO::fromSpesa)
+	            .collect(Collectors.toList());
+	}
 
-    public List<Spesa> trovaByUtenteCategoriaEData(String username, String categoria, LocalDate a, LocalDate b) {
-        return spesaRepository.findByUtenteUsernameAndCategoriaAndDataBetween(username, categoria, a, b);
-    }
-    
+	
+
+	@Transactional(readOnly = true)
+	public List<SpesaDTO> trovaByUtente(String username) {
+	    Utente utente = utenteRepository.findByUsernameConSpese(username)
+	            .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato"));
+	    return spesaRepository.findByUtenteFetch(utente)
+	            .stream()
+	            .map(SpesaDTO::fromSpesa)
+	            .collect(Collectors.toList());
+	}
+	
+	@Transactional(readOnly = true)
+	public List<SpesaDTO> trovaTutte() {
+	    return spesaRepository.findAllConUtente().stream()
+	            .map(SpesaDTO::fromSpesa)
+	            .collect(Collectors.toList());
+	}
     @Transactional
     public List<SpesaDTO> filtraSpese(String username, String categoria, LocalDate a,LocalDate b) {
         Utente utente = utenteRepository.findByUsernameConSpese(username)
@@ -194,15 +203,22 @@ public class SpesaService {
                       : spesaRepository.findTotalByUtente(username);
     }
     
-    public Page<SpesaDTO> trovaPerUtentePaginato(Utente utente, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("data").descending()); // ordina per data
-        Page<Spesa> spesePage = spesaRepository.findByUtentePag(utente, pageable);
-        return spesePage.map(SpesaDTO::fromSpesa);
-    }
-
-    public Page<SpesaDTO> trovaTutteSpesePaginato(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("data").descending());
-        return spesaRepository.findByAdminPag(pageable).map(SpesaDTO::fromSpesa);
-    }
+  
 	
+    private boolean utenteHaRuolo(String ruolo) {
+	    return SecurityContextHolder.getContext().getAuthentication().getAuthorities()
+	        .stream()
+	        .anyMatch(a -> a.getAuthority().equals("ROLE_" + ruolo));
+	}
+	
+	public SpesaDTO convertToDTO(Spesa spesa) {
+        return new SpesaDTO(
+            spesa.getId(),
+            spesa.getMetodoPagamento(),
+            spesa.getImporto(),
+            spesa.getCategoria(),
+            spesa.getData(),
+            spesa.getUtente() != null ? spesa.getUtente().getUsername() : null
+        );
+    }
 }

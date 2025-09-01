@@ -53,8 +53,11 @@ public class SecurityConfig {
                         // ADMIN/UTENTE
 	                    .requestMatchers(HttpMethod.GET, "/api/spese/filtro").hasAnyRole("ADMIN","USER")
 	                    .requestMatchers(HttpMethod.GET, "/api/spese").hasAnyRole("USER", "ADMIN")
-	                    .requestMatchers(HttpMethod.GET, "/api/spese/totaleSpese").hasAnyRole("USER", "ADMIN")	                    
-	                    // SOLO ADMIN	                    
+	                    .requestMatchers(HttpMethod.GET, "/api/spese/totaleSpese").hasAnyRole("USER", "ADMIN")
+	                    .requestMatchers("/api/spese/tutte-con-utente-paginato").hasAnyRole("USER","ADMIN")
+
+	                    // SOLO ADMIN	 
+	                    .requestMatchers("/api/spese/tutte-paginato").hasRole("ADMIN")
 	                    .requestMatchers(HttpMethod.POST, "/api/utenti/crea").hasRole("ADMIN")
 	                    .requestMatchers(HttpMethod.GET, "/api/utenti/tutti").hasRole("ADMIN")
 	                    .requestMatchers(HttpMethod.DELETE, "/api/utenti/**").hasRole("ADMIN")

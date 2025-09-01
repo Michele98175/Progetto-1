@@ -6,55 +6,69 @@
 
 <link rel="stylesheet" href="css/login.css">
 <link rel="stylesheet" href="css/spese.css">
-
-  <style >
-  
-   /* body { font-family: Arial, sans-serif; margin: 20px; } */
-    #lista-spese { margin-top: 20px; }
-    #lista-spese table { border-collapse: collapse; width: 100%; }
-    #lista-spese th, #lista-spese td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    
-    /* body { font-family: Arial, sans-serif; margin: 20px; } */
-    #lista-utenti { margin-top: 20px; }
-    #lista-utenti table { border-collapse: collapse; width: 100%; }
-    #lista-utenti th, #lista-utenti td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-  </style>
+<link rel="stylesheet" href="css/bottoni.css">
   
 </head>
 <body>
-  
+
+<div class="aa"></div>
+
   <div id="login-form">
     <h2>LOGIN</h2>
     <input type="text" id="username" placeholder="Username" /><br /><br />
     <input type="password" id="password" placeholder="Password" /><br /><br />
-    <button class="btn btn-login" onclick="login()">Login</button><br><br>
+    <button class="btn btn-login" onclick="login()">
+    <span class="testo">LOGIN</span>
+    <svg class="icona" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M10 17l5-5-5-5v3H0v4h10v3zm12-13H12v2h10v14H12v2h10c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/>
+    </svg>
+    </button>
     <a href="Registrazione.html">Registrazione</a>
   </div>
   
 
   <div id="logout-form" style="display:none;">
     <p>Sei loggato come <span id="utente-loggato"></span>.</p>
-    <button class="btn btn-logout" onclick="logout()">Logout</button>
+    <button class="btn btn-logout" onclick="logout()">
+  <span class="testo">LOGOUT</span>
+  <svg class="icona" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+    <polyline points="16 17 21 12 16 7" />
+    <line x1="21" y1="12" x2="9" y2="12" />
+  </svg>
+</button>
   </div>
   
   
     <div id="aggiunta-spesa" style="display: none;">
-  <h3 style="color: blue">Aggiungi nuova spesa</h3>
+  <h3 style="color: black">AGGIUNGI SPESA</h3>
   <div>
-    <input type="text" id="descrizione" placeholder="Descrizione">
-    <input type="number" id="importo" placeholder="Importo">
+  <label for="metodoPagamento"></label>
+<select id="metodoPagamento">
+  <option value="">Metodo Pagamento</option>
+  <option value="Contanti">Contanti</option>
+  <option value="Carta">Carta</option>
+  <option value="Bonifico">Bonifico</option>
+</select>
     <input type="text" id="categoria" placeholder="Categoria">
+    <input type="number" id="importo" placeholder="Importo">
     <input type="date" id="data">
-    <button class="btn btn-aggiungi" onclick="aggiungiSpesa()">Aggiungi</button>
+    <button class="btn btn-aggiungi" onclick="aggiungiSpesa()">
+    <span class="testo">AGGIUNGI</span>
+    <svg class="icona" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="12" y1="5" x2="12" y2="19"></line>
+    <line x1="5" y1="12" x2="19" y2="12"></line>
+  </svg>
+</button>
   </div>
-  
+  </div>
 
   <div id="lista-spese" style="display:none;">
-    <h2 style="color: blue">Lista Spese</h2>
+    <h2 style="color: black">LISTA SPESE</h2>
 
   <table>
     <thead>
-      <tr><th>Utente</th><th>Descrizione</th><th>Categoria</th><th>Importo</th><th>Data</th><th>Azioni</th></tr>
+      <tr><th>Utente</th><th>Metodo Pagamento</th><th>Categoria</th><th>Importo</th><th>Data</th><th>Azioni</th></tr>
     </thead>
     <tbody id="spese-tbody"></tbody>
     <tfoot>
@@ -67,11 +81,11 @@
 <div id="paginazione-container" style="margin-top: 10px; display: flex; gap: 10px;"></div>
 <div id="paginazione">
   <span id="numero-pagina" style="color: red"></span><br><br>
-  <button onclick="paginaPrecedente()">Precedente</button>
-  <button onclick="paginaSuccessiva()">Successiva</button>
+  <button onclick="paginaPrecedente()">PRECEDENTE</button>
+  <button onclick="paginaSuccessiva()">SUCCESSIVA</button>
 </div>
 
-  <h2 style="color: blue">Filtra Spese</h2>
+  <h2 style="color: black">FILTRA SPESE</h2>
 
   <form id="filtro-form">
     <div id="utente-f-div">
@@ -94,14 +108,20 @@
       <input type="date" id="dataFine">
     </div>
 
-    <button class="btn btn-filtra" type="button" onclick="filtraSpesa()">Cerca</button>
+    <button class="btn btn-filtra" type="button" onclick="filtraSpesa()">
+  <span class="testo">CERCA</span>
+  <svg class="icona" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="11" cy="11" r="8"></circle>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</button>
   </form>
 
-  <table>
+  <table id="tabella-filtrata">
     <thead>
       <tr>
         <th>Utente</th>
-        <th>Descrizione</th>
+        <th>Metodo Pagamento</th>
         <th>Categoria</th>
         <th>Importo</th>
         <th>Data</th>
@@ -118,7 +138,7 @@
 </div> 
   
   <div id="lista-utenti" style="display: none;">
-   <h2 style="color: blue">Lista Utenti</h2>
+   <h2 style="color: black">LISTA UTENTI</h2>
    <table>
    <thead>
        <tr><th>ID</th><th>Username</th><th>Email</th><th>Ruoli</th><th>Azioni</th></tr>
@@ -130,22 +150,34 @@
   
   
   <div id="modifica-spesa" style="display: none;">
-  <h3>Modifica Spesa</h3>
+  <h3 style="color:black">MODIFICA SPESA</h3>
   <input type="hidden" id="modifica-id" />
-  <input type="text" id="modifica-descrizione" placeholder="Descrizione" />
+  <input type="text" id="modifica-metodoPagamento" placeholder="Metodo Pagamento" />
   <input type="number" id="modifica-importo" placeholder="Importo" step="0.01" />
   <input type="text" id="modifica-categoria" placeholder="Categoria" />
   <input type="date" id="modifica-data" />
-  <button class="btn btn-salva" onclick="salvaModifica()">Salva</button>
-  <button class="btn btn-annulla" onclick="annullaModifica()">Annulla</button>
+  <button class="btn btn-salva" onclick="salvaModifica()">
+    <span class="testo">SALVA</span>
+    <svg class="icona" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  </button>
+
+  <button class="btn btn-annulla" onclick="annullaModifica()">
+    <span class="testo">ANNULLA</span>
+    <svg class="icona" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  </button>
 </div>
 
-
+   <!-- 
 <div id="admin-spese" style="display: none;">
 <button class="btn btn-tutte-spese" onclick="trovaTutteSpese()">Vedi Tutte Spese</button>
 <button class="btn btn-tutti-utenti" onclick="trovaTuttiUtenti()">Vedi Tutti Utenti</button>
 </div>
-
+ -->
 
 <script src="js/spese.js"></script>
 <script src="js/utenti.js"></script>

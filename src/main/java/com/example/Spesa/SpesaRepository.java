@@ -19,22 +19,20 @@ public interface SpesaRepository extends JpaRepository<Spesa, Long>{
 
 	//SE VUOI DARE IL NOME CHE VUOI AL METODO DEVI USARE ANNOTAZIONE QUERY 
 	//ALTRIMENTI DEVI USARE NOME SPECIFICO (findBy)PER FAR CAPIRE A SPRING DATA LA QUERY DA ESEGUIRE
-	
 
     @Query("SELECT s FROM Spesa s JOIN FETCH s.utente WHERE s.utente = :utente")
-    List<Spesa> findByUtente(@Param("utente") Utente utente);
+    List<Spesa> findByUtenteFetch(@Param("utente") Utente utente);
 	
 	@Query("SELECT s FROM Spesa s JOIN FETCH s.utente WHERE s.categoria = :categoria")
 	List<Spesa> findByCategoria(@Param("categoria") String categoria);
 
 	@Query("SELECT s FROM Spesa s JOIN FETCH s.utente WHERE s.data BETWEEN :a AND :b")
 	List<Spesa> findByData(@Param("a") LocalDate a, @Param("b") LocalDate b);
-
-	@Query("SELECT s FROM Spesa s JOIN FETCH s.utente WHERE s.categoria = :categoria AND s.data BETWEEN :a AND :b")
-	List<Spesa> findByCategoriaEDataBetween(@Param("categoria") String categoria, @Param("a") LocalDate a, @Param("b") LocalDate b);
 	
 	@Query("SELECT s FROM Spesa s  JOIN FETCH s.utente")
 	List<Spesa> findAllConUtente();
+	
+	
 	
 	List<Spesa> findByUtenteUsername(String username);
 	
@@ -45,12 +43,13 @@ public interface SpesaRepository extends JpaRepository<Spesa, Long>{
 
 	    List<Spesa> findByUtenteUsernameAndDataBetween(String username, LocalDate a, LocalDate b);
 
-	    List<Spesa> findByUtenteUsernameAndCategoriaAndDataBetween(String username, String categoria, LocalDate a, LocalDate b);
 
-	@Query("SELECT new com.example.Spesa.SpesaDTO(s.id, s.descrizione,s.importo,s.categoria, s.data, u.username) FROM Spesa s JOIN s.utente u")
+	@Query("SELECT new com.example.Spesa.SpesaDTO(s.id,s.metodoPagamento,s.importo,s.categoria, s.data, u.username) FROM Spesa s JOIN s.utente u")
 	List<SpesaDTO> findAllSpeseDTO();
 
-	@Query("SELECT s FROM Spesa s WHERE s.utente = :utente "
+	@Query("SELECT s FROM Spesa s "
+			+ "JOIN FETCH s.utente "
+			+ "WHERE s.utente = :utente "
 		     + "AND (:categoria IS NULL OR s.categoria = :categoria) "
 		     + "AND (:a IS NULL OR :b IS NULL OR s.data BETWEEN :a AND :b)")
 		List<Spesa> filtra(@Param("utente") Utente utente,
@@ -64,12 +63,12 @@ public interface SpesaRepository extends JpaRepository<Spesa, Long>{
     @Query("SELECT COALESCE(SUM(s.importo), 0) FROM Spesa s")
     Double findTotalSpese();
     
-    @Query(value = "SELECT s FROM Spesa s JOIN FETCH s.utente WHERE s.utente = :utente",
+    @Query(value = "SELECT s FROM Spesa s JOIN FETCH s.utente u WHERE u = :utente",
     	   countQuery = "SELECT count(s) FROM Spesa s WHERE s.utente = :utente")
-    Page<Spesa> findByUtentePag(Utente utente, Pageable pageable);
+    Page<Spesa> findByUtentePag(@Param("utente")Utente utente, Pageable pageable);
 
-    @Query(value = "SELECT s FROM Spesa s JOIN s.utente u",
+    @Query(value = "SELECT s FROM Spesa s JOIN FETCH s.utente",
     	       countQuery = "SELECT count(s) FROM Spesa s")
-    	Page<Spesa> findByAdminPag(Pageable pageable);
+    	Page<Spesa> findAllSpese(Pageable pageable);
 
 }

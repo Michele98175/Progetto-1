@@ -5,6 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import com.example.Spesa.Spesa;
+import com.example.Spesa.Spesa.MetodoPagamento;
 import com.example.Spesa.SpesaRepository;
 import com.example.Utente.Utente.Ruolo;
 
@@ -40,7 +41,7 @@ public class ConfigUtenti implements CommandLineRunner{
 	Spesa spesa1 = new Spesa();
 	
 	spesa1.setUtente(Martina);
-	spesa1.setDescrizione("Amazon");
+	spesa1.setMetodoPagamento("Contanti");
 	spesa1.setImporto(19.99);
 	spesa1.setCategoria("Abbigliamento");
 	spesa1.setData(LocalDate.of(2025, 05, 16));
@@ -48,7 +49,7 @@ public class ConfigUtenti implements CommandLineRunner{
 	Spesa spesa2 = new Spesa();
 	
 	spesa2.setUtente(Martina);
-	spesa2.setDescrizione("Pandora");
+	spesa2.setMetodoPagamento("Contanti");
 	spesa2.setImporto(129.49);
 	spesa2.setCategoria("Gioielleria");
 	spesa2.setData(LocalDate.of(2025, 04, 03));

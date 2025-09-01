@@ -74,3 +74,27 @@ body{
 	  background-color: #004080; 
 	
 }
+.btn-register .testo {
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+
+.btn-register:hover .testo {
+  opacity: 0;
+}
+.btn-register svg {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  stroke: white;
+  opacity: 0;
+  transform: scale(0.5) rotate(-20deg);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.btn-register:hover svg {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
