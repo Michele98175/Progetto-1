@@ -9,6 +9,7 @@ Nome progetto: Gestione Spese
 Un’applicazione web per gestire le proprie spese personali, con autenticazione JWT e ruoli utente/admin.
 
 FUNZIONI PRINCIPALI:
+
 -Autenticazione e autorizzazione con Spring Security + JWT
 
 -Ruoli utente/admin
@@ -18,6 +19,7 @@ FUNZIONI PRINCIPALI:
 -Admin: può vedere e gestire tutte le spese e tutti gli utenti
 
 Gestione CRUD delle spese:
+
 -Creazione, modifica, eliminazione e visualizzazione spese.
 
 -Possibilità di filtrare le spese per ricerche piu specifiche.
@@ -37,7 +39,9 @@ NOME:A
 PASSWORD:1
 
 OBIETTIVI PROGETTO
+
 Questo progetto è stato sviluppato per:
+
 - migliorare le competenze in Spring Boot 
 - praticare lo sviluppo full-stack (backend + frontend)
 - creare un’app reale da inserire nel curriculum
