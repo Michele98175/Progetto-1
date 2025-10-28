@@ -1,8 +1,13 @@
 Autore: Michele Cirulli
+
 Email: michele.cirulli@icloud.com
+
 Profilo Linkedin: linkedin.com/in/michele-cirulli-16a93124a
+
 Nome progetto: Gestione Spese   
+
 Un’applicazione web per gestire le proprie spese personali, con autenticazione JWT e ruoli utente/admin.
+
 FUNZIONI PRINCIPALI:
 Autenticazione e autorizzazione con Spring Security + JWT
 Ruoli utente/admin
