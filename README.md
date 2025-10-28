@@ -23,12 +23,17 @@ Gestione CRUD delle spese:
 -Possibilità di filtrare le spese per ricerche piu specifiche.
 
 TECNOLOGIE UTILIZZATE:
+
 -Linguaggi:Java,HTML,CSS,Javascript
+
 -Framework:Spring Boot(Web,Security,JWT,JPA)
+
 -Database:MySQL
 
 CREDENZIALI ADMIN PER TESTARE:
+
 NOME:A
+
 PASSWORD:1
 
 OBIETTIVI PROGETTO
