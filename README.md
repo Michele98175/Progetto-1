@@ -10,12 +10,16 @@ Un’applicazione web per gestire le proprie spese personali, con autenticazione
 
 FUNZIONI PRINCIPALI:
 -Autenticazione e autorizzazione con Spring Security + JWT
+
 -Ruoli utente/admin
+
 -Utente: può gestire solo le proprie spese
+
 -Admin: può vedere e gestire tutte le spese e tutti gli utenti
 
 Gestione CRUD delle spese:
 -Creazione, modifica, eliminazione e visualizzazione spese.
+
 -Possibilità di filtrare le spese per ricerche piu specifiche.
 
 TECNOLOGIE UTILIZZATE:
